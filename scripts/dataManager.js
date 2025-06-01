@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { getConfig } from './utils.js';
 
-const dataFilePath = './files/data.json';
+const dataFilePath = '/home/brand/Documentos/bden/data.json';
 
 const readDataFile = () => {
     if (!fs.existsSync(dataFilePath)) {
