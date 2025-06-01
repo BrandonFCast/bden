@@ -1,0 +1,19 @@
+{
+  "name": "bden",
+  "version": "1.0.0",
+  "description": "bden",
+  "main": "bden.js",
+  "type": "module",
+  "bin": {
+    "bden": "./bden.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "BrandBC",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "inquirer": "^12.6.3"
+  }
+}
