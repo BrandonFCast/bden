@@ -1,6 +1,7 @@
 import inquirer from 'inquirer'
-import colors from 'colors'
-import { getNoteById } from './dataManager.js'
+import 'colors'
+import { getNoteNames } from './dataManager.js'
+import Note from './Note.js'
 
 export const showMainMenu = async () => {
     const res = await inquirer.prompt([
@@ -9,20 +10,22 @@ export const showMainMenu = async () => {
             name: 'index',
             message: 'BDEN - Menú principal'.rainbow,
             choices: [
-                { name: 'Lista de notas'.blue, value: 1 },
-                { name: 'Crear nota'.green, value: 2 },
-                { name: 'Eliminar notas'.blue, value: 3 },
-                { name: 'Configuración'.blue, value: 4 },
-                { name: 'Salir'.red, value: 5 }
+                { name: 'Lista de notas'.blue, value: showNotesMenu },
+                { name: 'Crear nota'.green, value: null },
+                { name: 'Eliminar notas'.blue, value: null },
+                { name: 'Configuración'.blue, value: null },
+                { name: 'Salir'.red, value: () => { console.log("adios") } }
             ]
         }
     ])
     console.clear();
-    return res.index;
+    res.index();
 }
 
-// title, body, tags, creationDate, lastModified, settings
 export const showNotesMenu = async (notes) => {
+    if (!notes) {
+        notes = getNoteNames();
+    }
     const res = await inquirer.prompt([
         {
             type: 'list',
@@ -32,18 +35,20 @@ export const showNotesMenu = async (notes) => {
             loop: false
         }
     ])
+    showNoteMenu(res.index);
 }
 
-// aqui adentro cuando elige una el siguiente menu sera: editar, eliminar, ver, atras
 export const showNoteMenu = async (id) => {
     console.clear();
-    const note = getNoteById(id);
+    const note = new Note(id);
+    
     const res = await inquirer.prompt([
         {
             type: 'list',
             name: 'index',
-            message: note.title.rainbow,
+            message: note.title.rainbow + '\n\n' + note.getPreviewText(),
             choices: [
+                new inquirer.Separator(),
                 { name: 'Ver nota'.blue, value: 1 },
                 { name: 'Editar nota'.blue, value: 2 },
                 { name: 'Eliminar nota'.red, value: 3 },
