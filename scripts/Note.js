@@ -4,7 +4,11 @@ import "colors";
 export default class Note {
     #creationDate
     #lastModified
-    constructor (id) {
+    constructor (title) {
+        this.title = title;
+    }
+
+    loadData(id) {
         const data = getNoteById(id);
         this.title = data.title;
         this.body = data.body;

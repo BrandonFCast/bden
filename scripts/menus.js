@@ -40,13 +40,14 @@ export const showNotesMenu = async (notes) => {
 
 export const showNoteMenu = async (id) => {
     console.clear();
-    const note = new Note(id);
+    const note = new Note();
+    note.loadData(id)
     
     const res = await inquirer.prompt([
         {
             type: 'list',
             name: 'index',
-            message: note.title.rainbow + '\n\n' + note.getPreviewText(),
+            message: note.title.rainbow + '\n' + note.getPreviewText(),
             choices: [
                 new inquirer.Separator(),
                 { name: 'Ver nota'.blue, value: 1 },
@@ -56,6 +57,35 @@ export const showNoteMenu = async (id) => {
             ]
         }
     ])
+}
+export const createNoteMenu = async () => {
+    console.clear();
+    const res = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'Título de la nota:'.green,
+            validate: (input) => {
+                if (input.trim() === '') {
+                    return 'El título no puede estar vacío';
+                }
+                return true;
+            }
+        },
+        {
+            type: "list",
+            name: 'note-type',
+            message: "tipo de nota:",
+            choices: [
+                {name: 'Normal ' + '(una nota comun, escribe lo que estes pensando)'.yellow, value: 1},
+                {name: 'Url' + ' (una url donde puedes elegir con que navegador se abre)'.magenta, value: 2},
+                {name: 'Lista' + ' (una lista de opciones que puedes cambiar de estado)'.cyan, value: 3}
+            ]
+        }
+    ])
+    const note = new Note(res.title);
+    await note.save();
+    console.log(`Nota "${res.title}" creada exitosamente`.green);
 }
 const readKeys = (title) => {
     return new Promise((resolve) => {
@@ -71,7 +101,7 @@ const readKeys = (title) => {
         let currentRow = 0;
         let currentCol = 0;
         let maxRow = 0;
-        const maxLineLength = 80; // Limite de caracteres por linea
+        const maxLineLength = 30; // Limite de caracteres por linea
 
         const onKeyPress = (key) => {
             if (key === '\u0003') { // Ctrl+C
@@ -121,6 +151,7 @@ const readKeys = (title) => {
                 return;
             }
             process.stdout.write(`${key}`);
+            
             if (isRegularKey){
                 lines[currentRow] += key;
                 currentCol++;
@@ -143,4 +174,4 @@ const readKeysExample = async () => {
     });
 }
 
-readKeysExample();
+//readKeysExample();
