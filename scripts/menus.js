@@ -77,14 +77,15 @@ export const createNoteMenu = async () => {
             name: 'note-type',
             message: "tipo de nota:",
             choices: [
-                {name: 'Normal ' + '(una nota comun, escribe lo que estes pensando)'.yellow, value: 1},
+                {name: 'Normal ' + '(una nota comun, escribe lo que estes pensando)'.yellow, value: readKeys},
                 {name: 'Url' + ' (una url donde puedes elegir con que navegador se abre)'.magenta, value: 2},
                 {name: 'Lista' + ' (una lista de opciones que puedes cambiar de estado)'.cyan, value: 3}
             ]
         }
     ])
     const note = new Note(res.title);
-    await note.save();
+    note.body = await readKeys(res.title);
+    note.save();
     console.log(`Nota "${res.title}" creada exitosamente`.green);
 }
 const readKeys = (title) => {
@@ -108,7 +109,8 @@ const readKeys = (title) => {
                 process.stdin.removeListener('data', onKeyPress);
                 process.stdin.setRawMode(false);
                 process.stdin.pause();
-                resolve({lines, currentCol, currentRow, maxRow});
+                //resolve({lines, currentCol, currentRow, maxRow});
+                resolve(lines.join('\n'));
                 return;
             }
             let currentLine = lines[currentRow];
