@@ -1,4 +1,4 @@
-import { getNoteById } from "./dataManager.js";
+import { addNote, getNoteById } from "./dataManager.js";
 import "colors";
 
 export default class Note {
@@ -30,6 +30,10 @@ export default class Note {
             finalText += ` ${tag} `.bgRed + ' ';
         }
         return finalText;
+    }
+
+    save () {
+        addNote(this.title, this.body, this.tags)
     }
     /**
      * @returns {string} a bit of the note body
