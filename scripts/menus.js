@@ -85,6 +85,14 @@ export const createNoteMenu = async () => {
     ])
     const note = new Note(res.title);
     note.body = await readKeys(res.title);
+    const {tags} = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'tags',
+            message: 'escribe las tags (separadas por comas)'.magenta,
+        }
+    ]);
+    note.tags = tags.split(',');
     note.save();
     console.log(`Nota "${res.title}" creada exitosamente`.green);
 }
