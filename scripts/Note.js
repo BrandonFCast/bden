@@ -1,11 +1,13 @@
 import { addNote, getNoteById } from "./dataManager.js";
 import "colors";
+import crypto from "crypto"
 
 export default class Note {
     #creationDate
     #lastModified
     constructor (title) {
         this.title = title;
+        this.id = crypto.randomUUID();
     }
 
     loadData(id) {
@@ -33,7 +35,7 @@ export default class Note {
     }
 
     save () {
-        addNote(this.title, this.body, this.tags)
+        addNote(this.id, this.title, this.body, this.tags)
     }
     /**
      * @returns {string} a bit of the note body
