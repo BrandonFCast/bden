@@ -16,9 +16,9 @@ const saveData = (data) => {
     fs.writeFileSync(dataFilePath, JSON.stringify(data));
 }
 
-export const addNote = (title, note, tags = []) => {
+export const addNote = (id, title, note, tags = []) => {
     const data = readDataFile();
-    data.notes.push({ title, body: note, tags, creationDate: 'xx-xx-xx', lastModified: 'xx-xx-xx' });
+    data.notes.push({ id, title, body: note, tags, creationDate: 'xx-xx-xx', lastModified: 'xx-xx-xx' });
     saveData(data);
 }
 
